@@ -1350,13 +1350,11 @@
    "id": "outer-letters",
    "metadata": {},
    "outputs": [],
-   "source": [
-    "#resnet fine"
-   ]
+   "source": []
   },
   {
    "cell_type": "code",
-   "execution_count": 1,
+   "execution_count": 3,
    "id": "center-blood",
    "metadata": {},
    "outputs": [
@@ -1364,8 +1362,18 @@
      "name": "stdout",
      "output_type": "stream",
      "text": [
+
       "Images Shape: (32, 32, 3, 50000)\n",
-      "Train Labels Coarse Shape: (50000,)\n"
+      "Train Labels Coarse Shape: (50000,)\n",
+
+      "Epoch 1/100\n",
+      "1094/1094 [==============================] - 814s 742ms/step - loss: 3.3487 - accuracy: 0.1461 - val_loss: 25.5810 - val_accuracy: 0.0513\n",
+      "Epoch 2/100\n",
+      "1094/1094 [==============================] - 844s 771ms/step - loss: 3.0946 - accuracy: 0.1979 - val_loss: 104.0267 - val_accuracy: 0.0500\n",
+      "Epoch 3/100\n",
+      "1094/1094 [==============================] - 836s 764ms/step - loss: 3.0387 - accuracy: 0.1677 - val_loss: 5.8192 - val_accuracy: 0.0993\n",
+      "Epoch 4/100\n",
+      " 189/1094 [====>.........................] - ETA: 11:23 - loss: 2.9373 - accuracy: 0.1710"
      ]
     }
    ],
@@ -1373,11 +1381,11 @@
     "import numpy as np\n",
     "import tensorflow as tf\n",
     "images = np.load('trnImage.npy')\n",
-    "labels = np.load('trnLabel_fine.npy')\n",
+    "labels = np.load('trnLabel_coarse.npy')\n",
     "#labels_fine = np.load('trnLabel_fine.npy')\n",
     "\n",
     "test_images = np.load('tstImage.npy')\n",
-    "test_labels = np.load('tstLabel_fine.npy')\n",
+    "test_labels = np.load('tstLabel_coarse.npy')\n",
     "#test_labels_fine = np.load('tstLabel_fine.npy')\n",
     "\n",
     "print(f'Images Shape: {images.shape}')\n",
@@ -1386,7 +1394,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 2,
+   "execution_count": 4,
    "id": "ruled-semiconductor",
    "metadata": {},
    "outputs": [
@@ -1407,14 +1415,11 @@
     "test_labels_reshaped = test_labels.reshape(10000, 1)\n",
     "#labels_fine_reshaped = labels_fine.reshape(50000, 1)\n",
     "\n",
-    "x_train_normalised = np.divide(train_images_reshaped, 255)\n",
-    "x_test_normalised = np.divide(test_images_reshaped, 255)\n",
-    "\n",
-    "x_train = x_train_normalised\n",
+    "x_train = train_images_reshaped\n",
     "y_train = labels_reshaped\n",
     "#y_train = labels_fine_reshaped\n",
     "\n",
-    "x_test = x_test_normalised\n",
+    "x_test = test_images_reshaped\n",
     "y_test = test_labels_reshaped\n",
     "\n",
     "\n",
@@ -1458,77 +1463,89 @@
     "\n",
     "x_val = x_test\n",
     "y_val = y_test\n",
-    "\n"
+    "\n",
+    "#Defining the parameters\n",
+    "batch_size= 25\n",
+    "epochs=2\n",
+    "learn_rate=.01"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 6,
+   "execution_count": 5,
    "id": "metallic-payday",
    "metadata": {},
    "outputs": [],
    "source": [
-    "\n",
     "#Defining the parameters\n",
-    "batch_size= 50\n",
-    "epochs=100"
+    "batch_size= 100\n",
+    "epochs=50"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 7,
+   "execution_count": 9,
    "id": "employed-crawford",
    "metadata": {},
    "outputs": [
     {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "Epoch 1/100\n",
-      " 49/700 [=>............................] - ETA: 12:19 - loss: 6.8385 - accuracy: 0.0025"
-     ]
-    },
-    {
-     "ename": "KeyboardInterrupt",
-     "evalue": "",
+     "ename": "NameError",
+     "evalue": "name 'keras' is not defined",
      "output_type": "error",
      "traceback": [
       "\u001b[1;31m---------------------------------------------------------------------------\u001b[0m",
-      "\u001b[1;31mKeyboardInterrupt\u001b[0m                         Traceback (most recent call last)",
-      "\u001b[1;32m<ipython-input-7-81c246c17dc1>\u001b[0m in \u001b[0;36m<module>\u001b[1;34m\u001b[0m\n\u001b[0;32m     18\u001b[0m     \u001b[0msteps_per_epoch\u001b[0m \u001b[1;33m=\u001b[0m \u001b[0mx_train\u001b[0m\u001b[1;33m.\u001b[0m\u001b[0mshape\u001b[0m\u001b[1;33m[\u001b[0m\u001b[1;36m0\u001b[0m\u001b[1;33m]\u001b[0m\u001b[1;33m//\u001b[0m\u001b[0mbatch_size\u001b[0m\u001b[1;33m,\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[0;32m     19\u001b[0m     \u001b[0mvalidation_data\u001b[0m \u001b[1;33m=\u001b[0m \u001b[0mval_generator\u001b[0m\u001b[1;33m.\u001b[0m\u001b[0mflow\u001b[0m\u001b[1;33m(\u001b[0m\u001b[0mx_val\u001b[0m\u001b[1;33m,\u001b[0m \u001b[0my_val\u001b[0m\u001b[1;33m,\u001b[0m \u001b[0mbatch_size\u001b[0m\u001b[1;33m=\u001b[0m\u001b[0mbatch_size\u001b[0m\u001b[1;33m)\u001b[0m\u001b[1;33m,\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[1;32m---> 20\u001b[1;33m     \u001b[0mvalidation_steps\u001b[0m \u001b[1;33m=\u001b[0m \u001b[0mlen\u001b[0m\u001b[1;33m(\u001b[0m\u001b[0mx_test\u001b[0m\u001b[1;33m)\u001b[0m\u001b[1;33m//\u001b[0m\u001b[0mbatch_size\u001b[0m\u001b[1;33m,\u001b[0m \u001b[0mverbose\u001b[0m\u001b[1;33m=\u001b[0m\u001b[1;36m1\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[0m\u001b[0;32m     21\u001b[0m )\n",
-      "\u001b[1;32mc:\\users\\lizks\\appdata\\local\\programs\\python\\python37\\lib\\site-packages\\tensorflow\\python\\keras\\engine\\training.py\u001b[0m in \u001b[0;36mfit\u001b[1;34m(self, x, y, batch_size, epochs, verbose, callbacks, validation_split, validation_data, shuffle, class_weight, sample_weight, initial_epoch, steps_per_epoch, validation_steps, validation_batch_size, validation_freq, max_queue_size, workers, use_multiprocessing)\u001b[0m\n\u001b[0;32m   1098\u001b[0m                 _r=1):\n\u001b[0;32m   1099\u001b[0m               \u001b[0mcallbacks\u001b[0m\u001b[1;33m.\u001b[0m\u001b[0mon_train_batch_begin\u001b[0m\u001b[1;33m(\u001b[0m\u001b[0mstep\u001b[0m\u001b[1;33m)\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[1;32m-> 1100\u001b[1;33m               \u001b[0mtmp_logs\u001b[0m \u001b[1;33m=\u001b[0m \u001b[0mself\u001b[0m\u001b[1;33m.\u001b[0m\u001b[0mtrain_function\u001b[0m\u001b[1;33m(\u001b[0m\u001b[0miterator\u001b[0m\u001b[1;33m)\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[0m\u001b[0;32m   1101\u001b[0m               \u001b[1;32mif\u001b[0m \u001b[0mdata_handler\u001b[0m\u001b[1;33m.\u001b[0m\u001b[0mshould_sync\u001b[0m\u001b[1;33m:\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[0;32m   1102\u001b[0m                 \u001b[0mcontext\u001b[0m\u001b[1;33m.\u001b[0m\u001b[0masync_wait\u001b[0m\u001b[1;33m(\u001b[0m\u001b[1;33m)\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n",
-      "\u001b[1;32mc:\\users\\lizks\\appdata\\local\\programs\\python\\python37\\lib\\site-packages\\tensorflow\\python\\eager\\def_function.py\u001b[0m in \u001b[0;36m__call__\u001b[1;34m(self, *args, **kwds)\u001b[0m\n\u001b[0;32m    826\u001b[0m     \u001b[0mtracing_count\u001b[0m \u001b[1;33m=\u001b[0m \u001b[0mself\u001b[0m\u001b[1;33m.\u001b[0m\u001b[0mexperimental_get_tracing_count\u001b[0m\u001b[1;33m(\u001b[0m\u001b[1;33m)\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[0;32m    827\u001b[0m     \u001b[1;32mwith\u001b[0m \u001b[0mtrace\u001b[0m\u001b[1;33m.\u001b[0m\u001b[0mTrace\u001b[0m\u001b[1;33m(\u001b[0m\u001b[0mself\u001b[0m\u001b[1;33m.\u001b[0m\u001b[0m_name\u001b[0m\u001b[1;33m)\u001b[0m \u001b[1;32mas\u001b[0m \u001b[0mtm\u001b[0m\u001b[1;33m:\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[1;32m--> 828\u001b[1;33m       \u001b[0mresult\u001b[0m \u001b[1;33m=\u001b[0m \u001b[0mself\u001b[0m\u001b[1;33m.\u001b[0m\u001b[0m_call\u001b[0m\u001b[1;33m(\u001b[0m\u001b[1;33m*\u001b[0m\u001b[0margs\u001b[0m\u001b[1;33m,\u001b[0m \u001b[1;33m**\u001b[0m\u001b[0mkwds\u001b[0m\u001b[1;33m)\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[0m\u001b[0;32m    829\u001b[0m       \u001b[0mcompiler\u001b[0m \u001b[1;33m=\u001b[0m \u001b[1;34m\"xla\"\u001b[0m \u001b[1;32mif\u001b[0m \u001b[0mself\u001b[0m\u001b[1;33m.\u001b[0m\u001b[0m_experimental_compile\u001b[0m \u001b[1;32melse\u001b[0m \u001b[1;34m\"nonXla\"\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[0;32m    830\u001b[0m       \u001b[0mnew_tracing_count\u001b[0m \u001b[1;33m=\u001b[0m \u001b[0mself\u001b[0m\u001b[1;33m.\u001b[0m\u001b[0mexperimental_get_tracing_count\u001b[0m\u001b[1;33m(\u001b[0m\u001b[1;33m)\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n",
-      "\u001b[1;32mc:\\users\\lizks\\appdata\\local\\programs\\python\\python37\\lib\\site-packages\\tensorflow\\python\\eager\\def_function.py\u001b[0m in \u001b[0;36m_call\u001b[1;34m(self, *args, **kwds)\u001b[0m\n\u001b[0;32m    853\u001b[0m       \u001b[1;31m# In this case we have created variables on the first call, so we run the\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[0;32m    854\u001b[0m       \u001b[1;31m# defunned version which is guaranteed to never create variables.\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[1;32m--> 855\u001b[1;33m       \u001b[1;32mreturn\u001b[0m \u001b[0mself\u001b[0m\u001b[1;33m.\u001b[0m\u001b[0m_stateless_fn\u001b[0m\u001b[1;33m(\u001b[0m\u001b[1;33m*\u001b[0m\u001b[0margs\u001b[0m\u001b[1;33m,\u001b[0m \u001b[1;33m**\u001b[0m\u001b[0mkwds\u001b[0m\u001b[1;33m)\u001b[0m  \u001b[1;31m# pylint: disable=not-callable\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[0m\u001b[0;32m    856\u001b[0m     \u001b[1;32melif\u001b[0m \u001b[0mself\u001b[0m\u001b[1;33m.\u001b[0m\u001b[0m_stateful_fn\u001b[0m \u001b[1;32mis\u001b[0m \u001b[1;32mnot\u001b[0m \u001b[1;32mNone\u001b[0m\u001b[1;33m:\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[0;32m    857\u001b[0m       \u001b[1;31m# Release the lock early so that multiple threads can perform the call\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n",
-      "\u001b[1;32mc:\\users\\lizks\\appdata\\local\\programs\\python\\python37\\lib\\site-packages\\tensorflow\\python\\eager\\function.py\u001b[0m in \u001b[0;36m__call__\u001b[1;34m(self, *args, **kwargs)\u001b[0m\n\u001b[0;32m   2941\u001b[0m        filtered_flat_args) = self._maybe_define_function(args, kwargs)\n\u001b[0;32m   2942\u001b[0m     return graph_function._call_flat(\n\u001b[1;32m-> 2943\u001b[1;33m         filtered_flat_args, captured_inputs=graph_function.captured_inputs)  # pylint: disable=protected-access\n\u001b[0m\u001b[0;32m   2944\u001b[0m \u001b[1;33m\u001b[0m\u001b[0m\n\u001b[0;32m   2945\u001b[0m   \u001b[1;33m@\u001b[0m\u001b[0mproperty\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n",
-      "\u001b[1;32mc:\\users\\lizks\\appdata\\local\\programs\\python\\python37\\lib\\site-packages\\tensorflow\\python\\eager\\function.py\u001b[0m in \u001b[0;36m_call_flat\u001b[1;34m(self, args, captured_inputs, cancellation_manager)\u001b[0m\n\u001b[0;32m   1917\u001b[0m       \u001b[1;31m# No tape is watching; skip to running the function.\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[0;32m   1918\u001b[0m       return self._build_call_outputs(self._inference_function.call(\n\u001b[1;32m-> 1919\u001b[1;33m           ctx, args, cancellation_manager=cancellation_manager))\n\u001b[0m\u001b[0;32m   1920\u001b[0m     forward_backward = self._select_forward_and_backward_functions(\n\u001b[0;32m   1921\u001b[0m         \u001b[0margs\u001b[0m\u001b[1;33m,\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n",
-      "\u001b[1;32mc:\\users\\lizks\\appdata\\local\\programs\\python\\python37\\lib\\site-packages\\tensorflow\\python\\eager\\function.py\u001b[0m in \u001b[0;36mcall\u001b[1;34m(self, ctx, args, cancellation_manager)\u001b[0m\n\u001b[0;32m    558\u001b[0m               \u001b[0minputs\u001b[0m\u001b[1;33m=\u001b[0m\u001b[0margs\u001b[0m\u001b[1;33m,\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[0;32m    559\u001b[0m               \u001b[0mattrs\u001b[0m\u001b[1;33m=\u001b[0m\u001b[0mattrs\u001b[0m\u001b[1;33m,\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[1;32m--> 560\u001b[1;33m               ctx=ctx)\n\u001b[0m\u001b[0;32m    561\u001b[0m         \u001b[1;32melse\u001b[0m\u001b[1;33m:\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[0;32m    562\u001b[0m           outputs = execute.execute_with_cancellation(\n",
-      "\u001b[1;32mc:\\users\\lizks\\appdata\\local\\programs\\python\\python37\\lib\\site-packages\\tensorflow\\python\\eager\\execute.py\u001b[0m in \u001b[0;36mquick_execute\u001b[1;34m(op_name, num_outputs, inputs, attrs, ctx, name)\u001b[0m\n\u001b[0;32m     58\u001b[0m     \u001b[0mctx\u001b[0m\u001b[1;33m.\u001b[0m\u001b[0mensure_initialized\u001b[0m\u001b[1;33m(\u001b[0m\u001b[1;33m)\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[0;32m     59\u001b[0m     tensors = pywrap_tfe.TFE_Py_Execute(ctx._handle, device_name, op_name,\n\u001b[1;32m---> 60\u001b[1;33m                                         inputs, attrs, num_outputs)\n\u001b[0m\u001b[0;32m     61\u001b[0m   \u001b[1;32mexcept\u001b[0m \u001b[0mcore\u001b[0m\u001b[1;33m.\u001b[0m\u001b[0m_NotOkStatusException\u001b[0m \u001b[1;32mas\u001b[0m \u001b[0me\u001b[0m\u001b[1;33m:\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[0;32m     62\u001b[0m     \u001b[1;32mif\u001b[0m \u001b[0mname\u001b[0m \u001b[1;32mis\u001b[0m \u001b[1;32mnot\u001b[0m \u001b[1;32mNone\u001b[0m\u001b[1;33m:\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n",
-      "\u001b[1;31mKeyboardInterrupt\u001b[0m: "
+      "\u001b[1;31mNameError\u001b[0m                                 Traceback (most recent call last)",
+      "\u001b[1;32m<ipython-input-9-2a6db2d366da>\u001b[0m in \u001b[0;36m<module>\u001b[1;34m\u001b[0m\n\u001b[0;32m     21\u001b[0m \u001b[0mpathname\u001b[0m \u001b[1;33m=\u001b[0m \u001b[1;34m\"callbacko\"\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[0;32m     22\u001b[0m \u001b[1;33m\u001b[0m\u001b[0m\n\u001b[1;32m---> 23\u001b[1;33m \u001b[0mmodel_checkpoint\u001b[0m \u001b[1;33m=\u001b[0m \u001b[0mkeras\u001b[0m\u001b[1;33m.\u001b[0m\u001b[0mcallbacks\u001b[0m\u001b[1;33m.\u001b[0m\u001b[0mModelCheckpoint\u001b[0m\u001b[1;33m(\u001b[0m\u001b[0mpathname\u001b[0m\u001b[1;33m)\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[0m\u001b[0;32m     24\u001b[0m \u001b[1;33m\u001b[0m\u001b[0m\n\u001b[0;32m     25\u001b[0m \u001b[0mcsv_logger\u001b[0m \u001b[1;33m=\u001b[0m \u001b[0mkeras\u001b[0m\u001b[1;33m.\u001b[0m\u001b[0mcallbacks\u001b[0m\u001b[1;33m.\u001b[0m\u001b[0mCSVLogger\u001b[0m\u001b[1;33m(\u001b[0m\u001b[0mpathname\u001b[0m\u001b[1;33m)\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n",
+      "\u001b[1;31mNameError\u001b[0m: name 'keras' is not defined"
      ]
     }
    ],
    "source": [
+    "generator = tf.keras.preprocessing.image.ImageDataGenerator(horizontal_flip=True)\n",
     "\n",
-    "from keras.applications.resnet50 import ResNet50\n",
-    "from keras.datasets import cifar100\n",
-    "import tensorflow as tf\n",
-    "import datetime\n",
+    "generator.fit(x_train)\n",
     "\n",
-    "x_test = x_val\n",
-    "y_test = y_val\n",
+    "train_generator = generator.flow(\n",
+    "    x=x_train,\n",
+    "    y=y_train,\n",
+    "    batch_size=batch_size\n",
+    ")\n",
+    "    \n",
+    "validation_data = tf.keras.preprocessing.image.ImageDataGenerator()\n",
     "\n",
-    "model = ResNet50(input_shape=x_train.shape[1:], weights=None, pooling =\"max\")\n",
+    "validation_data.fit(x_val)\n",
+    "\n",
+    "validation_data = validation_data.flow(\n",
+    "    x=x_val,\n",
+    "    y=y_val,\n",
+    "    batch_size=batch_size\n",
+    ")\n",
+    "\n",
+    "pathname = \"callbacko\"\n",
+    "\n",
+    "model_checkpoint = tf.keras.callbacks.ModelCheckpoint(pathname)\n",
+    "\n",
+    "csv_logger = tf.keras.callbacks.CSVLogger(pathname)\n",
+    "\n",
+    "callbacks = [\n",
+    "    csv_logger,\n",
+    "    model_checkpoint\n",
+    "]\n",
+    "\n",
+    "\n",
+    "model = tf.keras.applications.ResNet50(input_shape=(32,32,3), weights=None, pooling =\"max\")\n",
     "model.compile(\n",
     "    optimizer = 'adam',\n",
     "    loss = 'sparse_categorical_crossentropy',\n",
     "    metrics = ['accuracy'])\n",
     "\n",
-    "model.fit(\n",
-    "    train_generator.flow(x_train, y_train, batch_size=batch_size),\n",
-    "    epochs = epochs,\n",
-    "    steps_per_epoch = x_train.shape[0]//batch_size,\n",
-    "    validation_data = val_generator.flow(x_val, y_val, batch_size=batch_size),\n",
-    "    validation_steps = len(x_test)//batch_size, verbose=1\n",
+    "\n",
+    "    \n",
+    "history = model.fit(\n",
+    "    train_generator, \n",
+    "    callbacks=callbacks,\n",
+    "    epochs=epochs,\n",
+    "    validation_data=validation_data\n",
     ")"
    ]
   },
@@ -1536,14 +1553,6 @@
    "cell_type": "code",
    "execution_count": null,
    "id": "consistent-ozone",
-   "metadata": {},
-   "outputs": [],
-   "source": []
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "id": "forty-ecology",
    "metadata": {},
    "outputs": [],
    "source": []
